@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.scaladsl.{Balance, Flow, GraphDSL, Merge, RunnableGraph, Sink, Source}
 import akka.stream.{ActorMaterializer, ClosedShape}
 import test.models.Models.{SomeA, Something}
-import test.source.TestSourceNonGeneric
+import test.source.TestSource
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -21,8 +21,7 @@ object Main extends App {
     import GraphDSL.Implicits._
     val WORKER_COUNT = 10
 
-    //    val in = Source.fromGraph(new TestSource[SomeA])
-    val in = Source.fromGraph(new TestSourceNonGeneric)
+    val in = Source.fromGraph(new TestSource[SomeA])
 
     val balancer = builder.add(Balance[Something](WORKER_COUNT))
     val merge = builder.add(Merge[Something](WORKER_COUNT))
